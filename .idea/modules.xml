@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/WhatsAppND/WhatsAppND.iml" filepath="$PROJECT_DIR$/WhatsAppND/WhatsAppND.iml" />
+      <module fileurl="file://$PROJECT_DIR$/WhatsAppNotificationDisabler.iml" filepath="$PROJECT_DIR$/WhatsAppNotificationDisabler.iml" />
+    </modules>
+  </component>
+</project>
+
