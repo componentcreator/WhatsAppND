@@ -14,7 +14,7 @@ repositories {
 
 android {
     compileSdkVersion 19
-    buildToolsVersion "19.0.0"
+    buildToolsVersion '19.0.0'
 
     defaultConfig {
         minSdkVersion 9
@@ -34,6 +34,11 @@ android {
 }
 
 dependencies {
-	compile 'com.android.support:support-v4:19.0.0'
-	compile 'com.android.support:appcompat-v7:+'
+    compile 'com.android.support:support-v4:19.0.0'
+    compile 'com.android.support:appcompat-v7:+'
+    compile files('lib/commons-io-2.4.jar')
+    compile files('lib/scprov-jdk15on-1.47.0.3.jar')
+    compile files('lib/sc-light-jdk15on-1.47.0.3.jar')
+    compile files('lib/ormlite-android-4.48.jar')
+    compile files('lib/ormlite-core-4.48.jar')
 }
