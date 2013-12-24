@@ -16,13 +16,11 @@ import net.escosoft.whatsappnd.actividades.ActividadPrincipal;
 import net.escosoft.whatsappnd.adaptadores.WhatsAppChatsAdapter;
 import net.escosoft.whatsappnd.modelo.WhatsAppChat;
 import net.escosoft.whatsappnd.util.BDHelper;
+import net.escosoft.whatsappnd.util.Shell;
 
 import java.sql.SQLException;
 import java.util.List;
 
-/**
- * Created by Victor on 24/12/13.
- */
 public class WhatsAppChats extends Fragment implements View.OnClickListener {
 
     /**
@@ -66,17 +64,28 @@ public class WhatsAppChats extends Fragment implements View.OnClickListener {
     @Override
     public void onClick(View v) {
         String databaseName = Environment.getExternalStorageDirectory().getAbsolutePath() + "/msgstore.db";
+        String encryptDatabaseName = Environment.getExternalStorageDirectory().getAbsolutePath() + "/WhatsApp/Databases/msgstore.db.crypt";
+        /** SIN ROOT **/
+            /*
+            * Si consigo hacer que este método funcione, esta aplicación no necesitará ROOT.
+            OpenSSLDecryptor.decryptFile(Aplicacion.getContexto(),new File(encryptDatabaseName),"346a23652a46392b4d73257c67317e352e3372482177652c",databaseName);
+            */
+
+        /** CON ROOT **/
+        Shell shell = new Shell();
+        String[] comando = new String[]{"su", "-c", "cp /data/data/com.whatsapp/databases/msgstore.db " + databaseName};
+        shell.sendShellCommand(comando);
         BDHelper.setDatabaseName(databaseName);
 
-        List<WhatsAppChat> grupos = null;
         try {
-            grupos = WhatsAppChat.getGrupos();
+            List<WhatsAppChat> grupos = WhatsAppChat.getGrupos();
             WhatsAppChatsAdapter groupAdapter = new WhatsAppChatsAdapter(Aplicacion.getContexto(), 0, grupos);
             chat_group.setAdapter(groupAdapter);
             chat_group.setVisibility(View.VISIBLE);
         } catch (SQLException e) {
             e.printStackTrace();
         }
+
     }
 }
 

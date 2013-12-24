@@ -21,8 +21,10 @@ import javax.crypto.BadPaddingException;
 import javax.crypto.Cipher;
 import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
+import javax.crypto.SecretKey;
 import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.PBEKeySpec;
+import javax.crypto.spec.SecretKeySpec;
 
 /**
  * Class created for StackOverflow by owlstead.
@@ -119,19 +121,20 @@ public class OpenSSLDecryptor {
         try {
             // Pasa el fichero a un array de bytes.
             byte[] encrypted = FileUtils.readFileToByteArray(archivo);
-            Cipher c = Cipher.getInstance("AES/CBC/PKCS5Padding", "BC");
+            Cipher c = Cipher.getInstance("AES/ECB/NoPadding", "SC");
 
             // Openssl puts SALTED__ then the 8 byte salt at the start of the file.  We simply copy it out.
             byte[] salt = new byte[8];
             System.arraycopy(encrypted, 8, salt, 0, 8);
-            SecretKeyFactory fact = SecretKeyFactory.getInstance("PBEWITHMD5AND128BITAES-CBC-OPENSSL", "BC");
-            c.init(Cipher.DECRYPT_MODE, fact.generateSecret(new PBEKeySpec(password.toCharArray(), salt, 100)));
+            SecretKeyFactory fact = SecretKeyFactory.getInstance("PBEWITHMD5AND128BITAES-CBC-OPENSSL", "SC");
+            SecretKey sk1 = new SecretKeySpec(fact.generateSecret(new PBEKeySpec(password.toCharArray(), salt, 100)).getEncoded(), "AES");
+            c.init(Cipher.DECRYPT_MODE, sk1);
 
             // Desencriptar el fichero.
             byte[] data = c.doFinal(encrypted, 16, encrypted.length - 16);
 
             //convert array of bytes into file
-            FileOutputStream fileOuputStream = contexto.openFileOutput(decryptedFile, Context.MODE_PRIVATE);
+            FileOutputStream fileOuputStream = new FileOutputStream(new File(decryptedFile));
             fileOuputStream.write(data);
             fileOuputStream.close();
         } catch (NoSuchProviderException e) {
